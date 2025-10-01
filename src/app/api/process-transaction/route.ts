@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { addJournalEntry } from '../../../lib/storage';
 
 // Simple NLP parser for demonstration
 function parseTransaction(description: string) {
@@ -97,7 +98,8 @@ export async function POST(request: NextRequest) {
       validated: true,
     };
     
-    // In a real app, you would save this to a database
+    // Store the journal entry
+    addJournalEntry(newEntry);
     console.log('New journal entry:', newEntry);
     
     return NextResponse.json(newEntry);
