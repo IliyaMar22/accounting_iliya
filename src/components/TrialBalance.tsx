@@ -57,7 +57,7 @@ const SecondaryButton = styled(Button)`
   }
 `;
 
-const StatusCard = styled.div`
+const StatusCard = styled.div<{ isBalanced: boolean }>`
   background: ${props => props.isBalanced ? '#f0f9ff' : '#fef2f2'};
   border: 2px solid ${props => props.isBalanced ? '#0ea5e9' : '#ef4444'};
   border-radius: 12px;
@@ -68,7 +68,7 @@ const StatusCard = styled.div`
   gap: 15px;
 `;
 
-const StatusIcon = styled.div`
+const StatusIcon = styled.div<{ isBalanced: boolean }>`
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -84,14 +84,14 @@ const StatusContent = styled.div`
   flex: 1;
 `;
 
-const StatusTitle = styled.h3`
+const StatusTitle = styled.h3<{ isBalanced: boolean }>`
   font-size: 18px;
   font-weight: 600;
   color: ${props => props.isBalanced ? '#0369a1' : '#dc2626'};
   margin-bottom: 5px;
 `;
 
-const StatusDescription = styled.p`
+const StatusDescription = styled.p<{ isBalanced: boolean }>`
   font-size: 14px;
   color: ${props => props.isBalanced ? '#0369a1' : '#dc2626'};
   margin: 0;

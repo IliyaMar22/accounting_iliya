@@ -153,7 +153,7 @@ const ExampleItem = styled.div`
   }
 `;
 
-const ResultContainer = styled.div`
+const ResultContainer = styled.div<{ isValid: boolean }>`
   margin-top: 30px;
   padding: 20px;
   background: ${props => props.isValid ? '#f0f9ff' : '#fef2f2'};
@@ -168,7 +168,7 @@ const ResultHeader = styled.div`
   margin-bottom: 15px;
 `;
 
-const ResultTitle = styled.h3`
+const ResultTitle = styled.h3<{ isValid: boolean }>`
   font-size: 18px;
   font-weight: 600;
   color: ${props => props.isValid ? '#0369a1' : '#dc2626'};
@@ -178,7 +178,7 @@ const ValidationNotes = styled.div`
   margin-top: 15px;
 `;
 
-const Note = styled.div`
+const Note = styled.div<{ type: 'success' | 'warning' | 'error' }>`
   padding: 8px 12px;
   margin-bottom: 8px;
   border-radius: 6px;

@@ -25,7 +25,7 @@ const StatsGrid = styled.div`
   margin-bottom: 30px;
 `;
 
-const StatCard = styled.div`
+const StatCard = styled.div<{ color?: string }>`
   background: white;
   border-radius: 12px;
   padding: 20px;
@@ -40,7 +40,7 @@ const StatHeader = styled.div`
   margin-bottom: 10px;
 `;
 
-const StatIcon = styled.div`
+const StatIcon = styled.div<{ color?: string }>`
   width: 40px;
   height: 40px;
   border-radius: 8px;
