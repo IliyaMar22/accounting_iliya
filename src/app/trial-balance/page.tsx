@@ -193,7 +193,7 @@ export default function TrialBalance() {
               <tbody className="bg-white/50 divide-y divide-gray-200/50">
                 {transactions.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-16 text-center">
+                    <td colSpan={6} className="px-6 py-16 text-center">
                       <div className="flex flex-col items-center">
                         <div className="p-6 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full mb-6 animate-pulse">
                           <FileText className="h-16 w-16 text-pink-500" />

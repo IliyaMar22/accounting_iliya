@@ -311,7 +311,7 @@ const TrialBalance: React.FC<TrialBalanceProps> = ({ trialBalance, onGeneratePDF
             )}
             {trialBalance.lines && (
               <TotalRow>
-                <TableCell colSpan="2"><strong>TOTAL</strong></TableCell>
+                <TableCell colSpan={2}><strong>TOTAL</strong></TableCell>
                 <DebitCell>{formatCurrency(trialBalance.total_debits)}</DebitCell>
                 <CreditCell>{formatCurrency(trialBalance.total_credits)}</CreditCell>
               </TotalRow>

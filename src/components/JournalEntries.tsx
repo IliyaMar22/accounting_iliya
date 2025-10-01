@@ -312,7 +312,7 @@ const JournalEntries: React.FC<JournalEntriesProps> = ({ transactions, onRefresh
                 )}
                 {entry.lines ? (
                   <TotalRow>
-                    <TableCell colSpan="2"><strong>Total</strong></TableCell>
+                    <TableCell colSpan={2}><strong>Total</strong></TableCell>
                     <DebitCell>{formatCurrency(entry.total_debits)}</DebitCell>
                     <CreditCell>{formatCurrency(entry.total_credits)}</CreditCell>
                   </TotalRow>
@@ -326,7 +326,7 @@ const JournalEntries: React.FC<JournalEntriesProps> = ({ transactions, onRefresh
                 )}
                 {!entry.lines && (
                   <TotalRow>
-                    <TableCell colSpan="2"><strong>Total</strong></TableCell>
+                    <TableCell colSpan={2}><strong>Total</strong></TableCell>
                     <DebitCell>{formatCurrency(entry.debitAmount)}</DebitCell>
                     <CreditCell>{formatCurrency(entry.creditAmount)}</CreditCell>
                   </TotalRow>
