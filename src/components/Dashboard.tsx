@@ -226,13 +226,13 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, trialBalance }) => 
     return acc;
   }, []) : [];
 
-  const transactionTrendData = transactions.slice(-10).map((entry, index) => ({
+  const transactionTrendData = transactions.slice(-10).map((entry: any, index: number) => ({
     day: `Day ${index + 1}`,
     debits: entry.total_debits || entry.debitAmount || 0,
     credits: entry.total_credits || entry.creditAmount || 0
   }));
 
-  const pieData = accountTypeData.map(item => ({
+  const pieData = accountTypeData.map((item: any) => ({
     name: item.type,
     value: item.debit + item.credit
   }));
@@ -349,7 +349,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, trialBalance }) => 
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {pieData.map((entry, index) => (
+                  {pieData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -366,7 +366,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, trialBalance }) => 
           Recent Transactions
         </ChartTitle>
         <EntriesList>
-          {transactions.slice(-5).map((entry, index) => (
+          {transactions.slice(-5).map((entry: any, index: number) => (
             <EntryItem key={entry.id || index}>
               <EntryIcon>{index + 1}</EntryIcon>
               <EntryContent>

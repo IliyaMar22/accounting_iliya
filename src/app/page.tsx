@@ -172,7 +172,7 @@ export default function Home() {
               is_balanced: isBalanced,
               total_debits: totalDebits,
               total_credits: totalCredits,
-              lines: accounts.map(account => ({
+              lines: accounts.map((account: any) => ({
                 account_name: account.name,
                 account_type: account.type,
                 debit_balance: account.balance > 0 ? account.balance : 0,
@@ -191,7 +191,7 @@ export default function Home() {
               is_balanced: isBalanced,
               total_debits: totalDebits,
               total_credits: totalCredits,
-              lines: accounts.map(account => ({
+              lines: accounts.map((account: any) => ({
                 account_name: account.name,
                 account_type: account.type,
                 debit_balance: account.balance > 0 ? account.balance : 0,

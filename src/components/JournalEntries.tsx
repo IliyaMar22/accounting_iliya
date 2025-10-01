@@ -257,7 +257,7 @@ const JournalEntries: React.FC<JournalEntriesProps> = ({ transactions, onRefresh
       </Header>
       
       <EntriesList>
-        {transactions.map((entry, index) => (
+        {transactions.map((entry: any, index: number) => (
           <EntryCard key={entry.id || index}>
             <EntryHeader>
               <EntryInfo>
