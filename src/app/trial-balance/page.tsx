@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Download, ArrowLeft, Calculator, CheckCircle, AlertCircle, TrendingUp, BarChart3, Sparkles, Star, Heart } from 'lucide-react';
+import { Download, ArrowLeft, Calculator, CheckCircle, AlertCircle, TrendingUp, BarChart3, Sparkles, Star, Heart, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { useTransactions } from '../../contexts/TransactionContext';
 
 export default function TrialBalance() {
-  const { accounts, loadAccounts, isLoading } = useTransactions();
+  const { transactions, accounts, totalDebits, totalCredits, isBalanced, loadTransactions, loadAccounts, isLoading } = useTransactions();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   useEffect(() => {
+    loadTransactions();
     loadAccounts();
-  }, [loadAccounts]);
+  }, [loadTransactions, loadAccounts]);
 
   const generatePDF = async () => {
     setIsGeneratingPDF(true);
@@ -41,16 +42,6 @@ export default function TrialBalance() {
       setIsGeneratingPDF(false);
     }
   };
-
-  const totalDebits = accounts
-    .filter(account => account.balance > 0)
-    .reduce((sum, account) => sum + account.balance, 0);
-  
-  const totalCredits = accounts
-    .filter(account => account.balance < 0)
-    .reduce((sum, account) => sum + Math.abs(account.balance), 0);
-
-  const isBalanced = Math.abs(totalDebits - totalCredits) < 0.01;
 
   if (isLoading) {
     return (
@@ -167,12 +158,12 @@ export default function TrialBalance() {
           })}
         </div>
 
-        {/* Trial Balance Table */}
-        <div className="bg-gradient-to-r from-white/80 via-blue-50/80 to-indigo-50/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/30 overflow-hidden relative">
+        {/* Journal Entries Table */}
+        <div className="bg-gradient-to-r from-white/80 via-blue-50/80 to-indigo-50/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/30 overflow-hidden relative mb-8">
           <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full -translate-y-20 translate-x-20"></div>
           <div className="px-8 py-6 border-b border-gray-200/50 bg-gradient-to-r from-gray-50/80 to-blue-50/80 relative">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Trial Balance as of {new Date().toLocaleDateString()}
+              Journal Entries
             </h2>
           </div>
           <div className="overflow-x-auto">
@@ -180,42 +171,66 @@ export default function TrialBalance() {
               <thead className="bg-gradient-to-r from-gray-50/80 to-blue-50/80">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                    Account Name
+                    Date
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                    Account Type
+                    Description
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    Debit Account
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    Credit Account
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
-                    Debit
+                    Debit Amount
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
-                    Credit
+                    Credit Amount
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white/50 divide-y divide-gray-200/50">
-                {accounts.map((account, index) => (
-                  <tr key={account.id} className="hover:bg-gradient-to-r hover:from-pink-50/50 hover:to-purple-50/50 transition-all duration-200 group">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 group-hover:text-pink-600 transition-colors">
-                      {account.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-300">
-                        {account.type}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600 text-right">
-                      {account.balance > 0 ? `$${account.balance.toLocaleString()}` : '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600 text-right">
-                      {account.balance < 0 ? `$${Math.abs(account.balance).toLocaleString()}` : '-'}
+                {transactions.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-16 text-center">
+                      <div className="flex flex-col items-center">
+                        <div className="p-6 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full mb-6 animate-pulse">
+                          <FileText className="h-16 w-16 text-pink-500" />
+                        </div>
+                        <p className="text-gray-600 text-xl font-semibold mb-2">No transactions yet</p>
+                        <p className="text-gray-500 text-sm">Add your first transaction to get started ✨</p>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  transactions.map((entry, index) => (
+                    <tr key={entry.id} className="hover:bg-gradient-to-r hover:from-pink-50/50 hover:to-purple-50/50 transition-all duration-200 group">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                        {new Date(entry.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                        {entry.description}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-bold">
+                        {entry.debitAccount}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-purple-600 font-bold">
+                        {entry.creditAccount}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-emerald-600 font-bold text-right">
+                        ${entry.debitAmount.toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-bold text-right">
+                        ${entry.creditAmount.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
               <tfoot className="bg-gradient-to-r from-gray-50/80 to-blue-50/80">
                 <tr className="border-t-2 border-gray-300">
-                  <td className="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900" colSpan={2}>
+                  <td className="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900" colSpan={4}>
                     Total
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-lg font-bold text-emerald-600 text-right">
@@ -227,6 +242,37 @@ export default function TrialBalance() {
                 </tr>
               </tfoot>
             </table>
+          </div>
+        </div>
+
+        {/* Trial Balance Summary */}
+        <div className="bg-gradient-to-r from-white/80 via-emerald-50/80 to-green-50/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/30 overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-emerald-400/10 to-green-400/10 rounded-full -translate-y-20 translate-x-20"></div>
+          <div className="px-8 py-6 border-b border-gray-200/50 bg-gradient-to-r from-gray-50/80 to-emerald-50/80 relative">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+              Trial Balance Summary as of {new Date().toLocaleDateString()}
+            </h2>
+          </div>
+          <div className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-emerald-700 mb-4">Total Debits</h3>
+                <div className="text-4xl font-bold text-emerald-600">${totalDebits.toLocaleString()}</div>
+              </div>
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-red-700 mb-4">Total Credits</h3>
+                <div className="text-4xl font-bold text-red-600">${totalCredits.toLocaleString()}</div>
+              </div>
+            </div>
+            <div className="mt-8 text-center">
+              <div className={`inline-flex items-center px-8 py-4 rounded-full text-xl font-bold ${
+                isBalanced 
+                  ? 'bg-gradient-to-r from-emerald-200 to-green-200 text-emerald-800 border-2 border-emerald-400' 
+                  : 'bg-gradient-to-r from-red-200 to-pink-200 text-red-800 border-2 border-red-400'
+              }`}>
+                {isBalanced ? '✅ Balanced' : '❌ Unbalanced'}
+              </div>
+            </div>
           </div>
         </div>
 

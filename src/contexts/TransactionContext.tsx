@@ -27,6 +27,9 @@ interface TransactionContextType {
   loadTransactions: () => Promise<void>;
   loadAccounts: () => Promise<void>;
   isLoading: boolean;
+  totalDebits: number;
+  totalCredits: number;
+  isBalanced: boolean;
 }
 
 const TransactionContext = createContext<TransactionContextType | undefined>(undefined);
@@ -36,7 +39,13 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Calculate totals from transactions
+  const totalDebits = transactions.reduce((sum, entry) => sum + entry.debitAmount, 0);
+  const totalCredits = transactions.reduce((sum, entry) => sum + entry.creditAmount, 0);
+  const isBalanced = Math.abs(totalDebits - totalCredits) < 0.01;
+
   const loadTransactions = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch('/api/journal-entries');
       if (response.ok) {
@@ -45,6 +54,8 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
       }
     } catch (error) {
       console.error('Error loading journal entries:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,7 +87,10 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
       addTransaction,
       loadTransactions,
       loadAccounts,
-      isLoading
+      isLoading,
+      totalDebits,
+      totalCredits,
+      isBalanced
     }}>
       {children}
     </TransactionContext.Provider>

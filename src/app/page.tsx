@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useTransactions } from '../contexts/TransactionContext';
 
 export default function Home() {
-  const { transactions, accounts, addTransaction, loadTransactions, loadAccounts, isLoading } = useTransactions();
+  const { transactions, accounts, addTransaction, loadTransactions, loadAccounts, isLoading, totalDebits, totalCredits, isBalanced } = useTransactions();
   const [newTransaction, setNewTransaction] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -76,9 +76,7 @@ export default function Home() {
     }
   };
 
-  const totalDebits = transactions.reduce((sum, t) => sum + t.debitAmount, 0);
-  const totalCredits = transactions.reduce((sum, t) => sum + t.creditAmount, 0);
-  const isBalanced = Math.abs(totalDebits - totalCredits) < 0.01;
+  // Totals are now calculated in the context
 
   const colorfulIcons = [Sparkles, Star, Heart, Coffee, Gift, Zap];
   const randomIcon = colorfulIcons[Math.floor(Math.random() * colorfulIcons.length)];
