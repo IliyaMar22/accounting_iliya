@@ -323,7 +323,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, trialBalance }) => 
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
                 <YAxis />
-                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Tooltip formatter={(value) => formatCurrency(Number(value))} />
                 <Bar dataKey="debits" fill="#dc2626" name="Debits" />
                 <Bar dataKey="credits" fill="#16a34a" name="Credits" />
               </BarChart>
@@ -353,7 +353,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, trialBalance }) => 
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               </PieChart>
             </ResponsiveContainer>
           </ChartContainer>
