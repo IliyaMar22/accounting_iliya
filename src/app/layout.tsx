@@ -1,40 +1,27 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { TransactionProvider } from '../contexts/TransactionContext';
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { TransactionProvider } from '../contexts/TransactionContext'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "AutoEntry AI - Smart Accounting Engine",
-  description: "AI-powered accounting software that understands natural language and automatically generates correct double-entry journal entries",
-};
+  title: 'AutoEntry AI - Smart Accounting Engine',
+  description: 'AI-powered accounting system for automated journal entry generation and trial balance management',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <TransactionProvider>
           {children}
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
         </TransactionProvider>
       </body>
     </html>
-  );
+  )
 }
